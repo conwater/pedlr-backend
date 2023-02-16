@@ -41,7 +41,7 @@ The backend is built using Python (and the packages below) to achieve the desire
 | flask        | 2.2.2       |
 
 ## Valid URLs
-This is a list of valid URLs that can be used to access the data. Make sure to replace the `<ip_address>` and `<bike_id>` with the IP 
+This is a list of valid URLs that can be used to access the data. Make sure to replace the `<ip_address>` and `<bike_id>` with the IP address of the server and the ID of the bike being accessed. 
 | **URL** | **Response** | **Type** |
 | :-----  | :----------- | :------- |
 | http://<ip_address>:8080/ | `{'message': 'Welcome to the Pedlr API!'}` | `GET` |
