@@ -11,8 +11,8 @@ Both the pedlr app and the pedlr bike lock can interact with this API, enabling 
 | **Variable** | **Type** | **Description** |
 | :----------- | :------: | :-------------- |
 | bike_id      | `dict`   | A dictionary containing the following info                   |
-| set_unlocked | `bool`   | Whether the phone has requested the bike to unlock           |
-| is_unlocked  | `bool`   | Whether the bike is unlocked                                 |
+| set_unlock | `bool`   | Whether the phone has requested the bike to unlock           |
+| is_unlock  | `bool`   | Whether the bike is unlocked                                 |
 | set_alarm    | `bool`   | Whether the phone has requested the alarm to activate        |
 | is_alarm     | `bool`   | Whether the bike's alarm is active                           |
 | GPS          | `list`   | A list containing the GPS latitude and longitude of the bike |
@@ -21,8 +21,8 @@ Below is a sample database entry for your reference.
 ```json
 {
   "abc123": {
-  "set_unlocked": true,
-  "is_unlocked": true,
+  "set_unlock": true,
+  "is_unlock": true,
   "set_alarm": false,
   "is_alarm": false,
   "GPS": [0,0]
@@ -45,7 +45,7 @@ This is a list of valid URLs that can be used to access the data. Make sure to r
 | **URL** | **Response** | **Type** |
 | :-----  | :----------- | :------- |
 | http://<ip_address>:8080/ | `{'message': 'Welcome to the Pedlr API!'}` | `GET` |
-| http://<ip_address>:8080/<bike_id>/info | `{'bike_id': <bike_id>, 'set_unlocked': <bool>, 'is_unlocked': <bool>, 'set_alarm': <bool>, 'is_alarm': <bool>, 'GPS': [0, 0]}` | `GET`|
-| http://<ip_address>:8080/<bike_id>/lock | `{'success': True}` or `{'success': False, 'message': '<error_message>'}` | `POST`  (must include either `set_unlocked` or `is_unlocked` entry in the request) |
+| http://<ip_address>:8080/<bike_id>/info | `{'bike_id': <bike_id>, 'set_unlock': <bool>, 'is_unlock': <bool>, 'set_alarm': <bool>, 'is_alarm': <bool>, 'GPS': [0, 0]}` | `GET`|
+| http://<ip_address>:8080/<bike_id>/unlock | `{'success': True}` or `{'success': False, 'message': '<error_message>'}` | `POST`  (must include either `set_unlock` or `is_unlock` entry in the request) |
 | http://<ip_address>:8080/<bike_id>/alarm | `{'success': True}` or `{'success': False, 'message': '<error_message>'}` | `POST`  (must include either `set_alarm` or `is_alarm` entry in the request) |
 | http://<ip_address>:8080/new_bike/<bike_id> | `{'success': True}` *or* `{'success': False}`  (this will make an initial entry into the database with the specified `bike_id`) | `POST` |

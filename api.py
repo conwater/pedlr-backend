@@ -21,7 +21,7 @@ def bike_data(bike_id):
 
 	return {'bike_id': bike_id, **bike}
 
-@app.route('/<bike_id>/lock', methods=['POST'])
+@app.route('/<bike_id>/unlock', methods=['POST'])
 def change_lock_state(bike_id):
 	if bike_database.get(bike_id) is False:
 		return {
@@ -30,34 +30,34 @@ def change_lock_state(bike_id):
 		}
 	post_data = dict(request.get_json())
 
-	if 'set_unlocked' in post_data.keys() and 'is_unlocked' in post_data.keys():
+	if 'set_unlock' in post_data.keys() and 'is_unlock' in post_data.keys():
 		return {
 			'success': False,
-			'message': f'Cannot set both "set_unlocked" and "is_unlocked" in the same request'
+			'message': f'Cannot set both "set_unlock" and "is_unlock" in the same request'
 		}
 
-	elif 'set_unlocked' not in post_data.keys() and 'is_unlocked' not in post_data.keys():
+	elif 'set_unlock' not in post_data.keys() and 'is_unlock' not in post_data.keys():
 		return {
 			'success': False,
-			'message': 'Request must contain either "is_unlocked" or "set_unlocked" state'
+			'message': 'Request must contain either "is_unlock" or "set_unlock" state'
 		}
 
-	elif 'set_unlocked' in post_data.keys():
-		state = post_data['set_unlocked']
+	elif 'set_unlock' in post_data.keys():
+		state = post_data['set_unlock']
 		if type(state) is not bool:
 			return {
 				'success': False,
-				'message': '"set_unlocked" must be a boolean (true or false)'
+				'message': '"set_unlock" must be a boolean (true or false)'
 			}
-		bike_database.dadd(bike_id, ('set_unlocked', state))
+		bike_database.dadd(bike_id, ('set_unlock', state))
 	else:
-		state = post_data['is_unlocked']
+		state = post_data['is_unlock']
 		if type(state) is not bool:
 			return {
 				'success': False,
-				'message': '"is_unlocked" must be a boolean (true or false)'
+				'message': '"is_unlock" must be a boolean (true or false)'
 			}
-		bike_database.dadd(bike_id, ('is_unlocked', state))
+		bike_database.dadd(bike_id, ('is_unlock', state))
 
 	bike_database.dump()
 	return {'success': True}
@@ -109,8 +109,8 @@ def register_bike(bike_id):
 		return {'success': False}
 
 	bike_dict = {
-		'set_unlocked': False,
-		'is_unlocked': False,
+		'set_unlock': False,
+		'is_unlock': False,
 		'set_alarm': False,
 		'is_alarm': False,
 		'GPS': [0, 0]
