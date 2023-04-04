@@ -4,9 +4,8 @@ import cgi
 import cgitb
 import json
 import pickledb
+import sys
 
-cgitb.enable(display=0, logdir="/web/entities/pedlr")
-#logfile = open("logfile.txt", "a")
 bike_database_name = "bikedatabase.db"
 bike_database = pickledb.load(bike_database_name, False)
 
@@ -22,15 +21,12 @@ def bike_data(bike_id=None):
 
 	return json.dumps({"bike_id": bike_id, **bike})
 
-def change_lock_state(bike_id):
+def change_lock_state(bike_id, post_data):
 	if bike_database.get(bike_id) is False:
 		return json.dumps({
 			'success': False,
 			'message': f'"{bike_id}" doesn\'t exist'
 		})
-
-	post_data = cgi.FieldStorage()
-	print(post_data)
 
 	if 'set_unlock' in post_data.keys() and 'is_unlock' in post_data.keys():
 		return json.dumps({
@@ -45,20 +41,24 @@ def change_lock_state(bike_id):
 		})
 
 	elif 'set_unlock' in post_data.keys():
-		state = post_data['set_unlock']
-		if type(state) is not bool:
+		state = post_data.getvalue('set_unlock').upper()
+		if state not in ('TRUE', 'FALSE'):
 			return json.dumps({
 				'success': False,
 				'message': '"set_unlock" must be a boolean (true or false)'
 			})
+		if state == 'TRUE': state = True
+		else: state = False
 		bike_database.dadd(bike_id, ('set_unlock', state))
 	else:
-		state = post_data['is_unlock']
-		if type(state) is not bool:
+		state = post_data.getvalue('is_unlock').upper()
+		if state not in ('TRUE', 'FALSE'):
 			return json.dumps({
 				'success': False,
 				'message': '"is_unlock" must be a boolean (true or false)'
 			})
+		if state == 'TRUE': state = True
+		else: state = False
 		bike_database.dadd(bike_id, ('is_unlock', state))
 	bike_database.dump()
 	return json.dumps({'success': True})
@@ -84,20 +84,24 @@ def change_alarm_state(bike_id):
 		})
 
 	elif 'set_alarm' in post_data.keys():
-		state = post_data['set_alarm']
-		if type(state) is not bool:
+		state = post_data.getvalue('set_alarm').upper()
+		if state not in ('TRUE', 'FALSE'):
 			return json.dumps({
 				'success': False,
 				'message': '"set_alarm" must be a boolean (true or false)'
 			})
+		if state == 'TRUE': state = True
+		else: state = False
 		bike_database.dadd(bike_id, ('set_alarm', state))
 	else:
-		state = post_data['is_alarm']
-		if type(state) is not bool:
+		state = post_data.getvalue('is_alarm').upper()
+		if state not in ('TRUE','FALSE'):
 			return json.dumps({
 				'success': False,
 				'message': '"is_alarm" must be a boolean (true or false)'
 			})
+		if state == 'TRUE': state = True
+		else: state = False
 		bike_database.dadd(bike_id, ('is_alarm', state))
 
 	bike_database.dump()
@@ -119,24 +123,6 @@ def register_bike(bike_id):
 	bike_database.dump()
 	return json.dumps({'success': True})
 
-def handle_post():
-	# Parse incoming data from request body
-	form = cgi.FieldStorage()
-	if "age" not in form:
-		return json.dumps({"error": "Missing age parameter"})
-
-	age = form.getvalue("age")
-	try:
-		age = int(age)
-	except ValueError:
-		return json.dumps({"error": "Age parameter must be an integer"})
-
-	# Update age in data
-	data = {"name": "John", "age": age, "city": "New York"}
-
-	# Return success message as JSON
-	return json.dumps({"status": "success"})
-
 if __name__ == '__main__':
 	# Parse incoming request and determine method
 	form = cgi.FieldStorage()
@@ -153,7 +139,7 @@ if __name__ == '__main__':
 	elif form['action'].value == 'info':
 		data = bike_data(form['bike_id'].value)
 	elif form['action'].value == 'unlock':
-		data = change_lock_state(form['bike_id'].value)
+		data = change_lock_state(form['bike_id'].value, form)
 	elif form['action'].value == 'alarm':
 		data = change_alarm_state(form['bike_id'].value)
 	elif form['action'].value == 'new_bike':
@@ -167,4 +153,3 @@ if __name__ == '__main__':
 	print("Content-Type: application/json")
 	print()
 	print(data)
-
