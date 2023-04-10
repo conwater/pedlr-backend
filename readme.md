@@ -49,3 +49,4 @@ This is a list of valid URLs that can be used to access the data. Make sure to r
 | http://<ip_address>:8080/<bike_id>/unlock | `{'success': True}` or `{'success': False, 'message': '<error_message>'}` | `POST`  (must include either `set_unlock` or `is_unlock` entry in the request) |
 | http://<ip_address>:8080/<bike_id>/alarm | `{'success': True}` or `{'success': False, 'message': '<error_message>'}` | `POST`  (must include either `set_alarm` or `is_alarm` entry in the request) |
 | http://<ip_address>:8080/new_bike/<bike_id> | `{'success': True}` *or* `{'success': False}`  (this will make an initial entry into the database with the specified `bike_id`) | `POST` |
+
