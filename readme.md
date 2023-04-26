@@ -44,9 +44,8 @@ The backend is built using Python (and the packages below) to achieve the desire
 This is a list of valid URLs that can be used to access the data. Make sure to replace the `<ip_address>` and `<bike_id>` with the IP address of the server and the ID of the bike being accessed. 
 | **URL** | **Response** | **Type** |
 | :-----  | :----------- | :------- |
-| http://<ip_address>:8080/ | `{'message': 'Welcome to the Pedlr API!'}` | `GET` |
-| http://<ip_address>:8080/<bike_id>/info | `{'bike_id': <bike_id>, 'set_unlock': <bool>, 'is_unlock': <bool>, 'set_alarm': <bool>, 'is_alarm': <bool>, 'GPS': [0, 0]}` | `GET`|
-| http://<ip_address>:8080/<bike_id>/unlock | `{'success': True}` or `{'success': False, 'message': '<error_message>'}` | `POST`  (must include either `set_unlock` or `is_unlock` entry in the request) |
-| http://<ip_address>:8080/<bike_id>/alarm | `{'success': True}` or `{'success': False, 'message': '<error_message>'}` | `POST`  (must include either `set_alarm` or `is_alarm` entry in the request) |
-| http://<ip_address>:8080/new_bike/<bike_id> | `{'success': True}` *or* `{'success': False}`  (this will make an initial entry into the database with the specified `bike_id`) | `POST` |
-
+| http://<ip_address>:8080/?bike_id=<bike_id>&action=info | `{'bike_id': <bike_id>, 'set_unlock': <bool>, 'is_unlock': <bool>, 'set_alarm': <bool>, 'is_alarm': <bool>, 'GPS': [0, 0]}` | `GET`|
+| http://<ip_address>:8080/?bike_id=<bike_id>&action=unlock | `{'success': True}` or `{'success': False, 'message': '<error_message>'}` | `GET`  (must also include either `set_unlock` or `is_unlock` parameter) |
+| http://<ip_address>:8080/?bike_id=<bike_id>&action=alarm | `{'success': True}` or `{'success': False, 'message': '<error_message>'}` | `GET`  (must also include either `set_alarm` or `is_alarm` parameter) |
+| http://<ip_address>:8080/?bike_id=<bike_id>&action=new_bike | `{'success': True}` *or* `{'success': False}`  (this will make an initial entry into the database with the specified `bike_id`) | `GET` |
+| http://<ip_address>:8080/?bike_id=<bike_id>&action=GPS | `{'success': True}` *or* `{'success': False}`  (must also include latitude and longitude as `x` and `y` parameters) | `GET` |
